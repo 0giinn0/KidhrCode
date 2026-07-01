@@ -1,21 +1,6 @@
 import { Tabs } from 'expo-router';
-import { Text, View } from 'react-native';
+import { View, Text } from 'react-native';
 import { COLORS } from '../../lib/constants';
-
-function TabIcon({ name, focused }) {
-  const icons = {
-    home: '🏠',
-    courses: '📚',
-    leaderboard: '🏆',
-    profile: '👤',
-    admin: '⚙️',
-  };
-  return (
-    <View style={{ alignItems: 'center' }}>
-      <Text style={{ fontSize: 22, opacity: focused ? 1 : 0.5 }}>{icons[name] || '📄'}</Text>
-    </View>
-  );
-}
 
 export default function TabLayout() {
   return (
@@ -23,43 +8,64 @@ export default function TabLayout() {
       screenOptions={{
         headerShown: false,
         tabBarStyle: {
-          backgroundColor: COLORS.surface,
+          backgroundColor: COLORS.background,
           borderTopColor: COLORS.border,
           borderTopWidth: 1,
-          paddingTop: 6,
+          paddingTop: 8,
           height: 60,
         },
-        tabBarActiveTintColor: COLORS.primary,
+        tabBarActiveTintColor: COLORS.text,
         tabBarInactiveTintColor: COLORS.textMuted,
-        tabBarLabelStyle: { fontSize: 11, fontWeight: '600', marginBottom: 6 },
+        tabBarLabelStyle: {
+          fontSize: 9,
+          fontFamily: 'monospace',
+          letterSpacing: 1,
+          marginBottom: 6,
+        },
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
-          tabBarIcon: ({ focused }) => <TabIcon name="home" focused={focused} />,
+          title: 'HOME',
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontFamily: 'monospace', fontSize: 12, color: focused ? COLORS.text : COLORS.textMuted, fontWeight: '700' }}>
+              [~]
+            </Text>
+          ),
         }}
       />
       <Tabs.Screen
         name="courses"
         options={{
-          title: 'Courses',
-          tabBarIcon: ({ focused }) => <TabIcon name="courses" focused={focused} />,
+          title: 'COURSES',
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontFamily: 'monospace', fontSize: 12, color: focused ? COLORS.text : COLORS.textMuted, fontWeight: '700' }}>
+              [{}]
+            </Text>
+          ),
         }}
       />
       <Tabs.Screen
         name="leaderboard"
         options={{
-          title: 'Leaderboard',
-          tabBarIcon: ({ focused }) => <TabIcon name="leaderboard" focused={focused} />,
+          title: 'RANKS',
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontFamily: 'monospace', fontSize: 12, color: focused ? COLORS.text : COLORS.textMuted, fontWeight: '700' }}>
+              [##]
+            </Text>
+          ),
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'Profile',
-          tabBarIcon: ({ focused }) => <TabIcon name="profile" focused={focused} />,
+          title: 'PROFILE',
+          tabBarIcon: ({ focused }) => (
+            <Text style={{ fontFamily: 'monospace', fontSize: 12, color: focused ? COLORS.text : COLORS.textMuted, fontWeight: '700' }}>
+              [@]
+            </Text>
+          ),
         }}
       />
     </Tabs>

@@ -1,0 +1,94 @@
+{
+  "name": "kidhrcode",
+  "displayName": "KidhrCode",
+  "description": "Learn programming languages with project-based courses inside VS Code",
+  "version": "1.0.0",
+  "publisher": "kidhrcode",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kidhrcode/kidhrcode"
+  },
+  "engines": {
+    "vscode": "^1.90.0"
+  },
+  "categories": [
+    "Education",
+    "Programming Languages"
+  ],
+  "icon": "media/icon.png",
+  "activationEvents": [
+    "onView:kidhrcode.courses",
+    "onCommand:kidhrcode.openCourse",
+    "onCommand:kidhrcode.openLesson"
+  ],
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "kidhrcode",
+          "title": "KidhrCode",
+          "icon": "media/icon.svg"
+        }
+      ]
+    },
+    "views": {
+      "kidhrcode": [
+        {
+          "type": "tree",
+          "id": "kidhrcode.courses",
+          "name": "Courses"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "kidhrcode.openCourse",
+        "title": "Open Course"
+      },
+      {
+        "command": "kidhrcode.openLesson",
+        "title": "Open Lesson"
+      },
+      {
+        "command": "kidhrcode.refreshCourses",
+        "title": "Refresh Courses",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "kidhrcode.signIn",
+        "title": "Sign In to KidhrCode"
+      },
+      {
+        "command": "kidhrcode.showProgress",
+        "title": "Show Progress"
+      }
+    ],
+    "menus": {
+      "view/title": [
+        {
+          "command": "kidhrcode.refreshCourses",
+          "when": "view == kidhrcode.courses",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "main": "./out/extension.js",
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "package": "vsce package",
+    "lint": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.90.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.5.0",
+    "vsce": "^2.15.0"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.110.0"
+  }
+}

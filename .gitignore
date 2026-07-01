@@ -39,3 +39,10 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# electron-builder output
+release/
+
+# vscode extension build
+vscode-kidhrcode/out/
+vscode-kidhrcode/*.vsix

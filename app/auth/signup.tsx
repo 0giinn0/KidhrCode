@@ -3,6 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, KeyboardAvo
 import { useRouter } from 'expo-router';
 import { supabase } from '../../lib/supabase';
 import { COLORS } from '../../lib/constants';
+import { TDivider } from '../../components/Terminal';
 
 export default function Signup() {
   const router = useRouter();
@@ -13,19 +14,19 @@ export default function Signup() {
 
   async function handleSignup() {
     if (!username.trim()) {
-      Alert.alert('Error', 'Please enter a username');
+      Alert.alert('[ !! ] error', 'username required');
       return;
     }
     setLoading(true);
-    const { data: { user }, error } = await supabase.auth.signUp({
+    const { error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { username } },
     });
     if (error) {
-      Alert.alert('Error', error.message);
+      Alert.alert('[ !! ] error', error.message);
     } else {
-      Alert.alert('Success', 'Check your email for confirmation!');
+      Alert.alert('[ ok ]', 'check your email for confirmation');
       router.push('/auth/login');
     }
     setLoading(false);
@@ -34,108 +35,72 @@ export default function Signup() {
   return (
     <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-        <Text style={styles.backText}>← Back</Text>
+        <Text style={styles.backText}>{'<'} back</Text>
       </TouchableOpacity>
 
-      <Text style={styles.title}>Join KidhrCode</Text>
-      <Text style={styles.subtitle}>Start your coding journey</Text>
+      <Text style={styles.title}>{'>'} sign up</Text>
+      <Text style={styles.subtitle}>create your account</Text>
+
+      <TDivider />
 
       <View style={styles.form}>
+        <Text style={styles.label}>{'>'} username</Text>
         <TextInput
           style={styles.input}
-          placeholder="Username"
+          placeholder="choose a username"
           placeholderTextColor={COLORS.textMuted}
           value={username}
           onChangeText={setUsername}
           autoCapitalize="none"
         />
+        <Text style={styles.label}>{'>'} email</Text>
         <TextInput
           style={styles.input}
-          placeholder="Email"
+          placeholder="your@email.com"
           placeholderTextColor={COLORS.textMuted}
           value={email}
           onChangeText={setEmail}
           autoCapitalize="none"
           keyboardType="email-address"
         />
+        <Text style={styles.label}>{'>'} password</Text>
         <TextInput
           style={styles.input}
-          placeholder="Password (min 6 characters)"
+          placeholder="min 6 characters"
           placeholderTextColor={COLORS.textMuted}
           value={password}
           onChangeText={setPassword}
           secureTextEntry
         />
-        <TouchableOpacity style={[styles.button, loading && styles.buttonDisabled]} onPress={handleSignup} disabled={loading}>
-          <Text style={styles.buttonText}>{loading ? 'Creating account...' : 'Create Account'}</Text>
+        <TouchableOpacity style={[styles.btn, loading && { opacity: 0.5 }]} onPress={handleSignup} disabled={loading}>
+          <Text style={styles.btnText}>[ ok ] {loading ? 'creating...' : 'create account'}</Text>
         </TouchableOpacity>
       </View>
 
-      <TouchableOpacity onPress={() => router.push('/auth/login')}>
-        <Text style={styles.link}>Already have an account? Sign in</Text>
+      <TouchableOpacity onPress={() => router.push('/auth/login')} style={styles.link}>
+        <Text style={styles.linkText}>{'>'} already have an account? sign in</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-    paddingHorizontal: 24,
-    justifyContent: 'center',
-  },
-  back: {
-    position: 'absolute',
-    top: 60,
-    left: 24,
-  },
-  backText: {
-    color: COLORS.primary,
-    fontSize: 16,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: COLORS.text,
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 16,
-    color: COLORS.textSecondary,
-    marginBottom: 32,
-  },
-  form: {
-    gap: 12,
-    marginBottom: 24,
-  },
+  container: { flex: 1, backgroundColor: COLORS.background, paddingHorizontal: 24, justifyContent: 'center' },
+  back: { position: 'absolute', top: 60, left: 24 },
+  backText: { color: COLORS.textSecondary, fontSize: 13, fontFamily: 'monospace' },
+  title: { fontSize: 22, fontWeight: '700', color: COLORS.text, fontFamily: 'monospace' },
+  subtitle: { fontSize: 12, color: COLORS.textSecondary, fontFamily: 'monospace', marginTop: 4, marginBottom: 16 },
+  form: { gap: 10 },
+  label: { fontSize: 11, color: COLORS.textMuted, fontFamily: 'monospace', letterSpacing: 1 },
   input: {
-    backgroundColor: COLORS.inputBg,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    borderRadius: 12,
-    padding: 16,
-    fontSize: 16,
-    color: COLORS.text,
+    backgroundColor: COLORS.inputBg, borderWidth: 1, borderColor: COLORS.border,
+    padding: 14, fontSize: 13, color: COLORS.text, fontFamily: 'monospace',
   },
-  button: {
-    backgroundColor: COLORS.primary,
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    marginTop: 8,
+  btn: {
+    borderWidth: 1, borderColor: COLORS.border, paddingVertical: 14,
+    alignItems: 'center', marginTop: 8,
   },
-  buttonDisabled: {
-    opacity: 0.6,
-  },
-  buttonText: {
-    color: COLORS.text,
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  link: {
-    color: COLORS.primary,
-    textAlign: 'center',
-    fontSize: 15,
-  },
+  btnText: { color: COLORS.terminal, fontSize: 13, fontFamily: 'monospace', fontWeight: '700' },
+  link: { marginTop: 24 },
+  linkText: { color: COLORS.textSecondary, fontSize: 12, fontFamily: 'monospace', textAlign: 'center' },
 });

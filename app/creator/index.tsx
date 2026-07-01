@@ -3,6 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator }
 import { useRouter } from 'expo-router';
 import { supabase } from '../../lib/supabase';
 import { COLORS } from '../../lib/constants';
+import { TDivider } from '../../components/Terminal';
 
 export default function CreatorDashboard() {
   const router = useRouter();
@@ -13,70 +14,61 @@ export default function CreatorDashboard() {
     supabase.auth.getUser().then(({ data: { user } }) => {
       if (!user) return;
       supabase.from('courses').select('*').eq('creator_id', user.id).order('created_at', { ascending: false })
-        .then(({ data }) => {
-          if (data) setCourses(data);
-          setLoading(false);
-        });
+        .then(({ data }) => { if (data) setCourses(data); setLoading(false); });
     });
   }, []);
 
   if (loading) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="small" color={COLORS.terminal} />
       </View>
     );
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Text style={styles.backText}>← Profile</Text>
-        </TouchableOpacity>
-        <Text style={styles.title}>Creator Studio</Text>
-      </View>
-
-      <TouchableOpacity style={styles.createBtn} onPress={() => router.push('/creator/create-course')}>
-        <Text style={styles.createIcon}>+</Text>
-        <Text style={styles.createText}>Create New Course</Text>
+      <TouchableOpacity onPress={() => router.back()} style={styles.back}>
+        <Text style={styles.backText}>{'<'} profile</Text>
       </TouchableOpacity>
 
-      {courses.length > 0 && (
-        <>
-          <Text style={styles.sectionTitle}>My Courses ({courses.length})</Text>
-          <FlatList
-            data={courses}
-            keyExtractor={item => item.id}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.courseCard}
-                onPress={() => router.push(`/creator/edit-course/${item.id}`)}
-              >
-                <View style={styles.courseHeader}>
-                  <Text style={styles.courseTitle}>{item.title}</Text>
-                  <View style={[styles.statusBadge, { backgroundColor: item.is_published ? COLORS.success + '30' : COLORS.textMuted + '30' }]}>
-                    <Text style={[styles.statusText, { color: item.is_published ? COLORS.success : COLORS.textMuted }]}>
-                      {item.is_published ? 'Published' : 'Draft'}
-                    </Text>
-                  </View>
-                </View>
-                <Text style={styles.courseDesc} numberOfLines={2}>{item.description}</Text>
-                <Text style={styles.courseMeta}>{item.language} · {item.difficulty}</Text>
-              </TouchableOpacity>
-            )}
-            ListEmptyComponent={
-              <View style={styles.empty}>
-                <Text style={styles.emptyEmoji}>📝</Text>
-                <Text style={styles.emptyText}>No courses yet</Text>
-                <Text style={styles.emptySubtext}>Tap "Create New Course" to get started</Text>
-              </View>
-            }
-            contentContainerStyle={styles.list}
-          />
-        </>
-      )}
+      <Text style={styles.title}>{'>'} creator studio</Text>
+      <Text style={styles.sub}>build and manage courses</Text>
 
+      <TouchableOpacity style={styles.createBtn} onPress={() => router.push('/creator/create-course')}>
+        <Text style={styles.createText}>[+] create new course</Text>
+      </TouchableOpacity>
+
+      <TDivider />
+
+      <Text style={styles.sectionTitle}>{'>'} my courses ({courses.length})</Text>
+
+      <FlatList
+        data={courses}
+        keyExtractor={item => item.id}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            style={styles.card}
+            onPress={() => router.push(`/creator/edit-course/${item.id}`)}
+          >
+            <View style={styles.cardTop}>
+              <Text style={styles.cardTitle}>{item.title}</Text>
+              <View style={[styles.status, { borderColor: item.is_published ? COLORS.success : COLORS.textMuted }]}>
+                <Text style={[styles.statusText, { color: item.is_published ? COLORS.success : COLORS.textMuted }]}>
+                  {item.is_published ? '[ok]' : '[..]'}
+                </Text>
+              </View>
+            </View>
+            <Text style={styles.cardMeta}>{item.language} | {item.difficulty}</Text>
+          </TouchableOpacity>
+        )}
+        ListEmptyComponent={
+          <View style={styles.empty}>
+            <Text style={styles.emptyText}>no courses yet</Text>
+          </View>
+        }
+        contentContainerStyle={styles.list}
+      />
       <View style={{ height: 100 }} />
     </View>
   );
@@ -85,29 +77,20 @@ export default function CreatorDashboard() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   loading: { flex: 1, backgroundColor: COLORS.background, justifyContent: 'center', alignItems: 'center' },
-  header: { paddingHorizontal: 16, paddingTop: 60, paddingBottom: 16 },
-  backText: { color: COLORS.primary, fontSize: 16, marginBottom: 8 },
-  title: { fontSize: 28, fontWeight: '800', color: COLORS.text },
-  createBtn: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.primary,
-    marginHorizontal: 16, padding: 20, borderRadius: 16, marginBottom: 24,
-  },
-  createIcon: { fontSize: 28, color: '#fff', fontWeight: '300', marginRight: 12 },
-  createText: { fontSize: 17, color: '#fff', fontWeight: '700' },
-  sectionTitle: { fontSize: 18, fontWeight: '700', color: COLORS.text, paddingHorizontal: 16, marginBottom: 12 },
-  list: { paddingBottom: 100 },
-  courseCard: {
-    backgroundColor: COLORS.surface, marginHorizontal: 16, marginBottom: 12,
-    borderRadius: 16, padding: 16, borderWidth: 1, borderColor: COLORS.border,
-  },
-  courseHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-  courseTitle: { fontSize: 17, fontWeight: '700', color: COLORS.text, flex: 1 },
-  statusBadge: { paddingHorizontal: 10, paddingVertical: 4, borderRadius: 8, marginLeft: 8 },
-  statusText: { fontSize: 12, fontWeight: '700' },
-  courseDesc: { fontSize: 14, color: COLORS.textSecondary, marginBottom: 8, lineHeight: 20 },
-  courseMeta: { fontSize: 13, color: COLORS.textMuted, textTransform: 'capitalize' },
-  empty: { alignItems: 'center', paddingTop: 60 },
-  emptyEmoji: { fontSize: 48, marginBottom: 16 },
-  emptyText: { fontSize: 18, fontWeight: '600', color: COLORS.text },
-  emptySubtext: { fontSize: 14, color: COLORS.textSecondary, marginTop: 8, textAlign: 'center' },
+  back: { paddingHorizontal: 16, paddingTop: 60, paddingBottom: 8 },
+  backText: { color: COLORS.textSecondary, fontSize: 13, fontFamily: 'monospace' },
+  title: { fontSize: 20, fontWeight: '700', color: COLORS.text, fontFamily: 'monospace', paddingHorizontal: 16 },
+  sub: { fontSize: 11, color: COLORS.textMuted, fontFamily: 'monospace', paddingHorizontal: 16, marginTop: 4, marginBottom: 20 },
+  createBtn: { borderWidth: 1, borderColor: COLORS.border, padding: 16, marginHorizontal: 16, marginBottom: 16 },
+  createText: { color: COLORS.terminal, fontSize: 13, fontFamily: 'monospace', fontWeight: '700', textAlign: 'center' },
+  sectionTitle: { fontSize: 11, color: COLORS.textSecondary, fontFamily: 'monospace', letterSpacing: 1, paddingHorizontal: 16, marginBottom: 12 },
+  list: { paddingHorizontal: 16, paddingBottom: 100 },
+  card: { borderWidth: 1, borderColor: COLORS.border, padding: 14, marginBottom: 8 },
+  cardTop: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
+  cardTitle: { fontSize: 13, fontWeight: '700', color: COLORS.text, fontFamily: 'monospace', flex: 1 },
+  status: { borderWidth: 1, paddingHorizontal: 8, paddingVertical: 3 },
+  statusText: { fontSize: 9, fontFamily: 'monospace', fontWeight: '700' },
+  cardMeta: { fontSize: 10, color: COLORS.textMuted, fontFamily: 'monospace', textTransform: 'capitalize' },
+  empty: { alignItems: 'center', paddingTop: 40 },
+  emptyText: { fontSize: 13, color: COLORS.textSecondary, fontFamily: 'monospace' },
 });

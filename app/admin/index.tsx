@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { supabase } from '../../lib/supabase';
 import { COLORS } from '../../lib/constants';
+import { TDivider } from '../../components/Terminal';
 
 export default function AdminDashboard() {
   const router = useRouter();
-  const [stats, setStats] = useState({ courses: 0, users: 0, exercises: 0 });
+  const [stats, setStats] = useState({ courses: 0, submissions: 0 });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -16,8 +17,7 @@ export default function AdminDashboard() {
     ]).then(([coursesRes, progressRes]) => {
       setStats({
         courses: coursesRes.count || 0,
-        exercises: progressRes.count || 0,
-        users: 0,
+        submissions: progressRes.count || 0,
       });
       setLoading(false);
     });
@@ -26,68 +26,64 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="small" color={COLORS.terminal} />
       </View>
     );
   }
 
+  const menuItems = [
+    { label: 'all courses', action: '[##]', onPress: () => router.push('/creator') },
+    { label: 'users', action: '[@]', onPress: () => {} },
+    { label: 'pending reviews', action: '[!!]', onPress: () => {} },
+    { label: 'creator studio', action: '[+]', onPress: () => router.push('/creator') },
+  ];
+
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Admin Dashboard</Text>
+    <ScrollView style={styles.container}>
+      <Text style={styles.title}>{'>'} admin</Text>
+      <Text style={styles.sub}>system overview</Text>
+
+      <TDivider />
 
       <View style={styles.statsRow}>
-        <StatBox value={stats.courses} label="Courses" />
-        <StatBox value={stats.exercises} label="Submissions" />
-        <StatBox value={stats.users} label="Users" />
+        <View style={styles.statBox}>
+          <Text style={styles.statValue}>{stats.courses}</Text>
+          <Text style={styles.statLabel}>courses</Text>
+        </View>
+        <View style={styles.statBox}>
+          <Text style={styles.statValue}>{stats.submissions}</Text>
+          <Text style={styles.statLabel}>submissions</Text>
+        </View>
       </View>
 
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Management</Text>
-        <MenuItem icon="📚" label="All Courses" onPress={() => {}} />
-        <MenuItem icon="👥" label="Users" onPress={() => {}} />
-        <MenuItem icon="🏷️" label="Pending Reviews" onPress={() => {}} />
-      </View>
-    </View>
-  );
-}
+      <TDivider />
 
-function StatBox({ value, label }) {
-  return (
-    <View style={styles.statBox}>
-      <Text style={styles.statValue}>{value}</Text>
-      <Text style={styles.statLabel}>{label}</Text>
-    </View>
-  );
-}
+      <Text style={styles.sectionTitle}>{'>'} management</Text>
+      {menuItems.map((item, i) => (
+        <TouchableOpacity key={i} style={styles.menuItem} onPress={item.onPress}>
+          <Text style={styles.menuAction}>{item.action}</Text>
+          <Text style={styles.menuLabel}>{item.label}</Text>
+          <Text style={styles.menuArrow}>{'>'}</Text>
+        </TouchableOpacity>
+      ))}
 
-function MenuItem({ icon, label, onPress }) {
-  return (
-    <TouchableOpacity style={styles.menuItem} onPress={onPress}>
-      <Text style={styles.menuIcon}>{icon}</Text>
-      <Text style={styles.menuText}>{label}</Text>
-      <Text style={styles.menuArrow}>→</Text>
-    </TouchableOpacity>
+      <View style={{ height: 100 }} />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: COLORS.background, paddingTop: 60 },
+  container: { flex: 1, backgroundColor: COLORS.background },
   loading: { flex: 1, backgroundColor: COLORS.background, justifyContent: 'center', alignItems: 'center' },
-  title: { fontSize: 28, fontWeight: '800', color: COLORS.text, paddingHorizontal: 16, marginBottom: 20 },
-  statsRow: { flexDirection: 'row', marginHorizontal: 16, gap: 12, marginBottom: 24 },
-  statBox: {
-    flex: 1, backgroundColor: COLORS.surface, borderRadius: 12, padding: 16,
-    alignItems: 'center', borderWidth: 1, borderColor: COLORS.border,
-  },
-  statValue: { fontSize: 28, fontWeight: '800', color: COLORS.text },
-  statLabel: { fontSize: 13, color: COLORS.textSecondary, marginTop: 4 },
-  section: { paddingHorizontal: 16, marginBottom: 24 },
-  sectionTitle: { fontSize: 18, fontWeight: '700', color: COLORS.text, marginBottom: 12 },
-  menuItem: {
-    flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surface,
-    borderRadius: 12, padding: 16, marginBottom: 8, borderWidth: 1, borderColor: COLORS.border,
-  },
-  menuIcon: { fontSize: 20, marginRight: 12 },
-  menuText: { flex: 1, fontSize: 16, color: COLORS.text, fontWeight: '500' },
-  menuArrow: { fontSize: 18, color: COLORS.textMuted },
+  title: { fontSize: 20, fontWeight: '700', color: COLORS.text, fontFamily: 'monospace', paddingHorizontal: 16 },
+  sub: { fontSize: 11, color: COLORS.textMuted, fontFamily: 'monospace', paddingHorizontal: 16, marginTop: 4, marginBottom: 8 },
+  statsRow: { flexDirection: 'row', marginHorizontal: 16, gap: 12, marginBottom: 16 },
+  statBox: { flex: 1, borderWidth: 1, borderColor: COLORS.border, padding: 16, alignItems: 'center' },
+  statValue: { fontSize: 28, fontWeight: '700', color: COLORS.terminal, fontFamily: 'monospace' },
+  statLabel: { fontSize: 10, color: COLORS.textMuted, fontFamily: 'monospace', letterSpacing: 1, marginTop: 4 },
+  sectionTitle: { fontSize: 11, color: COLORS.textSecondary, fontFamily: 'monospace', letterSpacing: 1, paddingHorizontal: 16, marginBottom: 12 },
+  menuItem: { flexDirection: 'row', alignItems: 'center', borderWidth: 1, borderColor: COLORS.border, padding: 16, marginHorizontal: 16, marginBottom: 8 },
+  menuAction: { fontSize: 13, color: COLORS.textMuted, fontFamily: 'monospace', marginRight: 12 },
+  menuLabel: { flex: 1, fontSize: 13, color: COLORS.text, fontFamily: 'monospace' },
+  menuArrow: { fontSize: 13, color: COLORS.textMuted, fontFamily: 'monospace' },
 });

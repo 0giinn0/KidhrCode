@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useRouter } from 'expo-router';
 import { COLORS } from '../lib/constants';
+import { TDivider } from '../components/Terminal';
 
 export default function Welcome() {
   const router = useRouter();
@@ -8,37 +9,34 @@ export default function Welcome() {
   return (
     <View style={styles.container}>
       <View style={styles.hero}>
-        <Text style={styles.emoji}>💻</Text>
-        <Text style={styles.title}>KidhrCode</Text>
-        <Text style={styles.subtitle}>Learn every language.{'\n'}Master every concept.{'\n'}For free. Forever.</Text>
+        <Text style={styles.ascii}>
+          {'  _  __ _           _        ____          _      '}{'\n'}
+          {' | |/ /(_)         | |      / ___|___   __| | ___ '}{'\n'}
+          {' | \' /  _ _ __   __| |___  | |   / _ \\ / _` |/ _ \\'}{'\n'}
+          {' | . \\ | | \'_ \\ / _` |___| | |__| (_) | (_| |  __/'}{'\n'}
+          {' |_|\\_\\|_| |_| \\__,_|     \\____\\___/ \\__,_|\\___|'}{'\n'}
+        </Text>
       </View>
 
-      <View style={styles.features}>
-        <Feature icon="📚" text="40+ exercise types" />
-        <Feature icon="🏆" text="Gamified learning" />
-        <Feature icon="🌍" text="17+ programming languages" />
-        <Feature icon="🎯" text="Skill trees & quests" />
-        <Feature icon="👥" text="Community courses" />
-        <Feature icon="🔥" text="Streaks & leaderboards" />
+      <TDivider />
+
+      <View style={styles.stats}>
+        <Text style={styles.statLine}>{'>'} 17+ languages supported</Text>
+        <Text style={styles.statLine}>{'>'} 40+ exercise types</Text>
+        <Text style={styles.statLine}>{'>'} XP, streaks & leaderboards</Text>
+        <Text style={styles.statLine}>{'>'} community courses</Text>
       </View>
+
+      <TDivider />
 
       <View style={styles.buttons}>
-        <TouchableOpacity style={styles.primaryBtn} onPress={() => router.push('/auth/signup')}>
-          <Text style={styles.primaryBtnText}>Get Started Free</Text>
+        <TouchableOpacity style={styles.btn} onPress={() => router.push('/auth/signup')}>
+          <Text style={styles.btnText}>[ enter ] start learning</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.secondaryBtn} onPress={() => router.push('/auth/login')}>
-          <Text style={styles.secondaryBtnText}>I already have an account</Text>
+        <TouchableOpacity style={styles.btnSecondary} onPress={() => router.push('/auth/login')}>
+          <Text style={styles.btnSecondaryText}>[ .. ] returning user</Text>
         </TouchableOpacity>
       </View>
-    </View>
-  );
-}
-
-function Feature({ icon, text }) {
-  return (
-    <View style={styles.feature}>
-      <Text style={styles.featureIcon}>{icon}</Text>
-      <Text style={styles.featureText}>{text}</Text>
     </View>
   );
 }
@@ -52,64 +50,56 @@ const styles = StyleSheet.create({
   },
   hero: {
     alignItems: 'center',
-    marginBottom: 48,
+    marginBottom: 24,
   },
-  emoji: {
-    fontSize: 64,
+  ascii: {
+    fontFamily: 'monospace',
+    fontSize: 10,
+    color: COLORS.primary,
+    lineHeight: 14,
     marginBottom: 16,
   },
-  title: {
-    fontSize: 40,
-    fontWeight: '800',
-    color: COLORS.text,
-    marginBottom: 12,
-  },
-  subtitle: {
-    fontSize: 16,
+  tagline: {
+    fontFamily: 'monospace',
+    fontSize: 13,
     color: COLORS.textSecondary,
-    textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 22,
   },
-  features: {
-    marginBottom: 48,
+  stats: {
+    marginBottom: 24,
   },
-  feature: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  featureIcon: {
-    fontSize: 20,
-    marginRight: 12,
-    width: 28,
-  },
-  featureText: {
-    fontSize: 15,
-    color: COLORS.textSecondary,
+  statLine: {
+    fontFamily: 'monospace',
+    fontSize: 12,
+    color: COLORS.textMuted,
+    marginBottom: 6,
+    lineHeight: 18,
   },
   buttons: {
-    gap: 12,
+    gap: 10,
   },
-  primaryBtn: {
-    backgroundColor: COLORS.primary,
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-  },
-  primaryBtnText: {
-    color: COLORS.text,
-    fontSize: 17,
-    fontWeight: '700',
-  },
-  secondaryBtn: {
-    paddingVertical: 16,
-    borderRadius: 12,
-    alignItems: 'center',
+  btn: {
     borderWidth: 1,
     borderColor: COLORS.border,
+    paddingVertical: 14,
+    alignItems: 'center',
   },
-  secondaryBtnText: {
+  btnText: {
+    color: COLORS.terminal,
+    fontSize: 13,
+    fontFamily: 'monospace',
+    fontWeight: '700',
+    letterSpacing: 1,
+  },
+  btnSecondary: {
+    borderWidth: 1,
+    borderColor: COLORS.border,
+    paddingVertical: 14,
+    alignItems: 'center',
+  },
+  btnSecondaryText: {
     color: COLORS.textSecondary,
-    fontSize: 15,
+    fontSize: 12,
+    fontFamily: 'monospace',
   },
 });

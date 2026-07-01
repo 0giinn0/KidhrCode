@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Alert, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { supabase } from '../../../lib/supabase';
 import { COLORS } from '../../../lib/constants';
+import { TDivider } from '../../../components/Terminal';
 
 export default function EditCourse() {
   const { id } = useLocalSearchParams();
@@ -23,14 +24,14 @@ export default function EditCourse() {
     setSaving(true);
     const { error } = await supabase.from('courses').update({ is_published: !course.is_published }).eq('id', id);
     if (!error) setCourse({ ...course, is_published: !course.is_published });
-    else Alert.alert('Error', error.message);
+    else Alert.alert('[!!] error', error.message);
     setSaving(false);
   }
 
   if (loading) {
     return (
       <View style={styles.loading}>
-        <ActivityIndicator size="large" color={COLORS.primary} />
+        <ActivityIndicator size="small" color={COLORS.terminal} />
       </View>
     );
   }
@@ -38,7 +39,7 @@ export default function EditCourse() {
   if (!course) {
     return (
       <View style={styles.loading}>
-        <Text style={{ color: COLORS.textSecondary }}>Course not found</Text>
+        <Text style={{ color: COLORS.textSecondary, fontFamily: 'monospace' }}>course not found</Text>
       </View>
     );
   }
@@ -46,37 +47,46 @@ export default function EditCourse() {
   return (
     <ScrollView style={styles.container}>
       <TouchableOpacity onPress={() => router.back()} style={styles.back}>
-        <Text style={styles.backText}>← Back</Text>
+        <Text style={styles.backText}>{'<'} dashboard</Text>
       </TouchableOpacity>
 
-      <Text style={styles.title}>{course.title}</Text>
+      <Text style={styles.title}>{'>'} {course.title}</Text>
+      <Text style={styles.sub}>course management</Text>
 
-      <View style={styles.actions}>
-        <TouchableOpacity
-          style={[styles.actionBtn, course.is_published ? styles.unpublishBtn : styles.publishBtn]}
-          onPress={togglePublish}
-          disabled={saving}
-        >
-          <Text style={styles.actionText}>
-            {saving ? 'Saving...' : course.is_published ? 'Unpublish' : 'Publish'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TDivider />
 
       <View style={styles.info}>
-        <Text style={styles.infoLabel}>Language</Text>
-        <Text style={styles.infoValue}>{course.language}</Text>
-        <Text style={styles.infoLabel}>Difficulty</Text>
-        <Text style={styles.infoValue}>{course.difficulty}</Text>
-        <Text style={styles.infoLabel}>Status</Text>
-        <Text style={[styles.infoValue, { color: course.is_published ? COLORS.success : COLORS.textMuted }]}>
-          {course.is_published ? 'Published' : 'Draft'}
-        </Text>
+        <View style={styles.infoRow}>
+          <Text style={styles.infoLabel}>language</Text>
+          <Text style={styles.infoValue}>{course.language}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.infoLabel}>difficulty</Text>
+          <Text style={styles.infoValue}>{course.difficulty}</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.infoLabel}>status</Text>
+          <Text style={[styles.infoValue, { color: course.is_published ? COLORS.success : COLORS.textMuted }]}>
+            {course.is_published ? '[ok] published' : '[..] draft'}
+          </Text>
+        </View>
       </View>
 
+      <TouchableOpacity
+        style={[styles.action, course.is_published && styles.actionUnpublish]}
+        onPress={togglePublish}
+        disabled={saving}
+      >
+        <Text style={styles.actionText}>
+          {saving ? '> saving...' : course.is_published ? '> unpublish' : '> publish course'}
+        </Text>
+      </TouchableOpacity>
+
+      <TDivider />
+
       <Text style={styles.hint}>
-        To edit modules and lessons, use the Supabase dashboard or API.{'\n'}
-        Course builder improvements coming soon.
+        editing modules & lessons coming soon.{'\n'}
+        use supabase dashboard for now.
       </Text>
     </ScrollView>
   );
@@ -86,18 +96,15 @@ const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: COLORS.background },
   loading: { flex: 1, backgroundColor: COLORS.background, justifyContent: 'center', alignItems: 'center' },
   back: { paddingHorizontal: 16, paddingTop: 60, paddingBottom: 8 },
-  backText: { color: COLORS.primary, fontSize: 16 },
-  title: { fontSize: 24, fontWeight: '800', color: COLORS.text, paddingHorizontal: 16, marginBottom: 20 },
-  actions: { paddingHorizontal: 16, marginBottom: 24 },
-  actionBtn: { paddingVertical: 14, borderRadius: 12, alignItems: 'center' },
-  publishBtn: { backgroundColor: COLORS.success },
-  unpublishBtn: { backgroundColor: COLORS.error },
-  actionText: { color: '#fff', fontSize: 16, fontWeight: '700' },
-  info: {
-    backgroundColor: COLORS.surface, marginHorizontal: 16, borderRadius: 16,
-    padding: 20, borderWidth: 1, borderColor: COLORS.border,
-  },
-  infoLabel: { fontSize: 13, color: COLORS.textMuted, marginTop: 12, marginBottom: 4 },
-  infoValue: { fontSize: 16, color: COLORS.text, fontWeight: '600', textTransform: 'capitalize' },
-  hint: { color: COLORS.textMuted, fontSize: 14, paddingHorizontal: 16, marginTop: 24, lineHeight: 20, textAlign: 'center' },
+  backText: { color: COLORS.textSecondary, fontSize: 13, fontFamily: 'monospace' },
+  title: { fontSize: 20, fontWeight: '700', color: COLORS.text, fontFamily: 'monospace', paddingHorizontal: 16 },
+  sub: { fontSize: 11, color: COLORS.textMuted, fontFamily: 'monospace', paddingHorizontal: 16, marginTop: 4, marginBottom: 8 },
+  info: { marginHorizontal: 16, borderWidth: 1, borderColor: COLORS.border, padding: 14, marginBottom: 16 },
+  infoRow: { flexDirection: 'row', justifyContent: 'space-between', paddingVertical: 8, borderBottomWidth: 1, borderBottomColor: COLORS.border },
+  infoLabel: { fontSize: 10, color: COLORS.textMuted, fontFamily: 'monospace', letterSpacing: 1 },
+  infoValue: { fontSize: 13, color: COLORS.text, fontFamily: 'monospace', fontWeight: '600', textTransform: 'capitalize' },
+  action: { borderWidth: 1, borderColor: COLORS.border, padding: 16, alignItems: 'center', marginHorizontal: 16 },
+  actionUnpublish: { borderColor: COLORS.error },
+  actionText: { color: COLORS.terminal, fontSize: 12, fontFamily: 'monospace', fontWeight: '700' },
+  hint: { color: COLORS.textMuted, fontSize: 11, fontFamily: 'monospace', paddingHorizontal: 16, marginTop: 16, lineHeight: 18, textAlign: 'center' },
 });
