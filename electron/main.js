@@ -47,6 +47,22 @@ function registerIpcHandlers() {
   });
 
   ipcMain.handle('app:version', () => app.getVersion());
+
+  ipcMain.handle('vscode:open', async (_, { code, lang }) => {
+    const extMap = { python: 'py', javascript: 'js', typescript: 'ts', rust: 'rs', go: 'go', java: 'java', cpp: 'cpp', csharp: 'cs', ruby: 'rb', php: 'php', bash: 'sh', dart: 'dart' };
+    const ext = extMap[lang] || 'txt';
+    const os = require('os');
+    const path = require('path');
+    const fs = require('fs');
+    const filePath = path.join(os.tmpdir(), `khc_${Date.now()}.${ext}`);
+    fs.writeFileSync(filePath, code);
+    const { exec } = require('child_process');
+    return new Promise((resolve) => {
+      exec(`code "${filePath}"`, (err) => {
+        resolve({ success: !err, error: err ? err.message : null, filePath });
+      });
+    });
+  });
 }
 
 app.whenReady().then(() => {

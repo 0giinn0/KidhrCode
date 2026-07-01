@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, TextInput, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, ActivityIndicator, TextInput, Alert, Platform } from 'react-native';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { supabase } from '../../lib/supabase';
 import { COLORS } from '../../lib/constants';
@@ -8,6 +8,8 @@ import { executeCode } from '../../lib/piston';
 import { calculateXp } from '../../lib/gamification';
 import { saveLocalProgress } from '../../lib/localProgress';
 import { TDivider } from '../../components/Terminal';
+import CodeEditor from '../../components/CodeEditor';
+import { isElectron } from '../../lib/runtimeDetect';
 
 export default function ExerciseScreen() {
   const { id } = useLocalSearchParams();
@@ -24,8 +26,11 @@ export default function ExerciseScreen() {
   const [runOutput, setRunOutput] = useState<any[]>([]);
   const [runMode, setRunMode] = useState<'idle' | 'running' | 'debugging'>('idle');
   const [isRunning, setIsRunning] = useState(false);
+  const [electronAware, setElectronAware] = useState(false);
   const debugCleanupRef = useRef<(() => void) | null>(null);
   const outputScrollRef = useRef<ScrollView>(null);
+
+  useEffect(() => { setElectronAware(isElectron()); }, []);
 
   useEffect(() => { loadExercise(); return () => { if (debugCleanupRef.current) debugCleanupRef.current(); }; }, [id]);
 
@@ -110,6 +115,16 @@ export default function ExerciseScreen() {
       setRunOutput([{ text: `error: ${e.message}`, stream: 'stderr' }]);
     }
     setIsRunning(false);
+  }
+
+  async function openInVSCode() {
+    try {
+      const lang = lesson?.modules?.courses?.language || 'python';
+      const win = window as any;
+      if (win.electronAPI?.openInVSCode) {
+        await win.electronAPI.openInVSCode(code, lang);
+      }
+    } catch {}
   }
 
   function handleDebug() {
@@ -217,6 +232,14 @@ export default function ExerciseScreen() {
                 {runMode === 'debugging' ? '[stop]' : '[debug]'}
               </Text>
             </TouchableOpacity>
+            {electronAware && (
+              <TouchableOpacity
+                style={[styles.actionBtn, styles.vscodeBtn]}
+                onPress={openInVSCode}
+              >
+                <Text style={styles.actionBtnText}>[ vs ]</Text>
+              </TouchableOpacity>
+            )}
           </>
         )}
         <TouchableOpacity
@@ -285,16 +308,15 @@ export default function ExerciseScreen() {
               </View>
             )}
             <View style={styles.editor}>
-              <Text style={styles.editorLabel}>{'>'} your code</Text>
-              <TextInput
-                style={styles.codeInput}
+              <Text style={styles.editorLabel}>
+                {'>'} your code
+                {electronAware && <Text style={styles.editorSub}>  [powered by Monaco — VS Code engine]</Text>}
+              </Text>
+              <CodeEditor
                 value={code}
-                onChangeText={setCode}
-                multiline
-                autoCapitalize="none"
-                autoCorrect={false}
-                placeholder="# write your code"
-                placeholderTextColor={COLORS.textMuted}
+                onChange={setCode}
+                language={lesson?.modules?.courses?.language || 'python'}
+                minHeight={200}
               />
             </View>
           </View>
@@ -345,6 +367,7 @@ const styles = StyleSheet.create({
   testLine: { fontSize: 10, color: COLORS.textMuted, fontFamily: 'monospace', marginBottom: 2 },
   editor: { paddingHorizontal: 16, marginBottom: 16 },
   editorLabel: { fontSize: 11, color: COLORS.terminal, fontFamily: 'monospace', marginBottom: 8 },
+  editorSub: { fontSize: 10, color: COLORS.textMuted },
   codeInput: {
     backgroundColor: '#000', color: COLORS.terminal, fontFamily: 'monospace', fontSize: 12,
     padding: 14, minHeight: 120, textAlignVertical: 'top', borderWidth: 1, borderColor: COLORS.border,
@@ -373,5 +396,6 @@ const styles = StyleSheet.create({
   actionBtnText: { color: COLORS.terminal, fontSize: 12, fontFamily: 'monospace', fontWeight: '700' },
   debugBtn: { borderColor: COLORS.textMuted },
   debugBtnActive: { borderColor: COLORS.prompt, backgroundColor: 'rgba(88,166,255,0.1)' },
+  vscodeBtn: { borderColor: '#007ACC', backgroundColor: 'rgba(0,122,204,0.08)' },
   submitBtn: {},
 });

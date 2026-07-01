@@ -18,4 +18,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.removeAllListeners('code:debug-done');
   },
   getAppVersion: () => ipcRenderer.invoke('app:version'),
+  openInVSCode: (code, lang) => ipcRenderer.invoke('vscode:open', { code, lang }),
 });
