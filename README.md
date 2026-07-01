@@ -1,230 +1,356 @@
-# 💻 KidhrCode
-
 ```
-
-
-     _    _ _     _           ____      _      
-    / \  | (_) __| |_ __ ___ |  _ \ ___| |___
-   / _ \ | | |/ _` | '__/ __|| |_) / __| / __|
-  / ___ \| | | (_| | | | (__ |  _ < (__| \__ \
- /_/   \_\_|_|\__,_|_|  \___||_| \_\___|_|___/
-                                               
+ _   _ _     _           ____      _
+/ \ | (_) __| |_ __ ___ |  _ \ ___| |___
+/ _ \| | |/ _` | '__/ __|| |_) / __| / __|
+/ ___ \| | | (_| | | | (__ |  _ < (__| \__ \
+/_/   \_\_|_|\__,_|_|  \___||_| \_\___|_|___/
 ```
-
 
 **Learn every programming language. Master every concept. For free. Forever.**
-*...and now also on your desktop with real local code execution and a VS Code extension because apparently one platform wasn't enough.*
-
-> "I understood the reference." — Captain America, probably, about this README
+*...now with a proper desktop app, a VS Code extension, and the ability to launch Godot/Unity/Unreal projects from your exercises because why the hell not.*
 
 ---
 
-## 🎯 Wait, What Is This?
+## Wait, What Is This?
 
-KidhrCode is a **free, open-source, gamified programming learning platform** that covers **17+ programming languages**, lets you **run code locally** on your actual machine (not some fake sandbox), has a **VS Code extension** so you never have to leave your precious editor, a **web PWA** for the heathens who browse, and an **Android APK** for... okay, that one's just because we could.
+KidhrCode is a **free, open-source, gamified programming learning platform** that covers **17+ programming languages**, with a **3-panel desktop UI** inspired by IDE bento box layouts. It lets you **run code locally**, launch **Godot/Unity/Unreal Engine projects**, open code in **VS Code**, track your **XP and streaks**, and earn **certificates**.
 
 It's like Duolingo for code, but with:
-- Fewer cartoon owls threatening your family
-- Actual real code execution
-- A terminal aesthetic that makes you feel like a hacker from a 90s movie
-- The ability to run code **on your actual computer** like a goddamn adult
+- Zero owls threatening your family
+- A real Monaco code editor with syntax highlighting
+- The ability to launch a Unity project from a C# exercise
+- A terminal aesthetic that makes you feel like you're in a 90s cyberpunk movie
 
 ---
 
-## ✨ Features (The Bullet Point Variety)
+## Features
 
-### 🖥️ Desktop App (Electron — NEW)
-- Cross-platform: Windows (.exe/.msi), macOS (.dmg), Linux (.AppImage/.deb)
-- **Local code execution** — runs Python, Node.js, C++, C#, Rust, Go, Java, and more ***on your machine***
+### Desktop App (Primary)
+```
+┌──────────────────────────────────────────────────────────────────┐
+│ [> kidhrcode] courses/Python 101               === 3d  +250 xp  │
+├────────────────┬──────────────────────────┬─────────────────────┤
+│   MODULES      │  LESSON + CODE EDITOR    │     OUTPUT           │
+│                │                          │                     │
+│ 01 Variables   │  "Write Hello World"     │  [run] [debug]       │
+│  [ok] var      │  ┌──────────────────┐    │  [ vs ] [submit]    │
+│  [ok] types    │  │  MONACO EDITOR   │    │                     │
+│  [>] strings   │  │  (syntax hl,     │    │  $ python3 run...   │
+│  [ ] numbers   │  │  intellisense)   │    │  Hello World        │
+│                │  └──────────────────┘    │                     │
+│ 02 Control     │  Test cases:             │  ▶ Godot ▶ Unity   │
+│  [ ] if/else   │  [1] in:Hello expected:H │  ▶ Unreal           │
+├────────────────┴──────────────────────────┴─────────────────────┤
+│ [ok] All tests passed!  +25 XP                                  │
+└──────────────────────────────────────────────────────────────────┘
+```
+
+- **Bento grid home** — course cards with progress bars, click to expand
+- **3-panel layout** — left: module/lesson tree | center: Monaco editor + instructions | right: output + run controls
+- **Resizable dividers** — drag to resize, collapse panels, restore buttons
+- **Monaco Editor** — the same editor engine that powers VS Code, with syntax highlighting for all 17 languages
 - **Two execution modes**:
-  - `[run]` — Execute code, see final output (like Piston but local, like your self-esteem: local)
-  - `[debug]` — Live streaming output as the process runs, because watching paint dry is also a valid hobby
-- Auto-detects installed language runtimes and shows you what you've got
-- No internet required for code execution once courses are loaded (take that, Piston API)
+  - `[run]` — execute locally, see final output
+  - `[debug]` — live streaming output with real-time process output
+- **Auto-detects** installed runtimes — Python, Node.js, C++, C#, Rust, Go, Java, Ruby, PHP, Bash, Dart
+- **No internet required** for code execution (local spawns only)
 
-### 🔌 VS Code Extension (NEW)
-- Browse courses directly in the VS Code sidebar (yes, inside the thing you already live in)
-- Open lessons in a webview panel with full course content
-- Run exercises using VS Code's built-in terminal (no runtime detection needed — VS Code already runs everything)
-- Progress syncs back to Supabase (same account, same streak, same bragging rights)
-- Refresh button to feel like you're doing something productive
+### Game Engine Integration
+| Engine | What Happens | Requires |
+|---|---|---|
+| **Godot** | Creates `project.godot` + GDScript file, runs headless `godot --script` | `godot` CLI installed |
+| **Unity** | Creates Unity project with C# script + Assembly-CSharp, launches `Unity -batchmode` | Unity Editor installed at default path |
+| **Unreal** | Creates `.uproject` with C++ source + build rules, launches `UnrealEditor-Cmd` | Unreal Engine 5.x installed at default path |
+| **VS Code** | Writes code to temp file, opens via `code` CLI | `code` command in PATH |
 
-### 🌐 Web & 📱 Mobile (Still Here, Still Free)
-- Progressive Web App — installable on any device
-- Android APK for sideloading (because Play Store is a walled garden and we're rebellious like that)
-- iOS via browser (Apple wants $99/year for the privilege of putting apps on their devices, we said nah)
-- Falls back to Piston API for code execution when you're not in the desktop app
+Each engine button detects whether the engine is installed and grays out if missing.
 
-### 🎓 Learning (The Core Thing)
-- 19 courses covering 17+ languages from Python to C++ to AI Prompt Engineering
-- Project-based workalong courses — you build real things, step by step
-- 16 exercise types: multiple choice, code challenges, debugging, Parsons problems, output prediction, and more
-- Community course creation — anyone can build and publish courses
+### VS Code Extension
+- Browse courses directly in the VS Code sidebar
+- Open lessons in a webview panel
+- Run exercises using VS Code's built-in terminal
+- Progress syncs back to Supabase
 
-### 🏆 Gamification (The Addictive Thing)
-- XP, levels, streaks, ranks, badges — all the dopamine, none of the owl
-- Daily login streaks with XP multipliers up to 2x (for the 30-day streak psychos)
-- Leaderboards: daily, weekly, monthly, all-time
-- Ranks: Novice → Coder → Developer → Engineer → Architect → Legend
-- Certificates with LinkedIn sharing for completed courses (print it, frame it, impress your mom)
+### Web & Mobile (Legacy — still works)
+- Progressive Web App via Expo web build
+- Android APK for sideloading
+- Falls back to Piston API for code execution
+
+### Gamification
+- XP per exercise, streaks with multipliers (up to 2x)
+- Levels, ranks (Novice → Legend), badges
+- Certificates with LinkedIn sharing for completed courses
 
 ---
 
-## 📊 Architecture (The Diagrams You Were Promised)
+## Architecture
 
 ### System Overview
 
 ```mermaid
 graph TB
-    subgraph Frontends
-        WEB["🌐 Web PWA<br/>React Native Web"]
-        MOBILE["📱 Mobile<br/>Expo Android/iOS"]
-        DESKTOP["🖥️ Desktop<br/>Electron"]
-        VSCODE["🔌 VS Code Extension"]
+    subgraph Frontend["Desktop App (Primary)"]
+        UI["desktop/index.html<br/>Vanilla JS + CSS"]
+        MONACO["Monaco Editor<br/>Code editing engine"]
+        SUPA["Supabase REST API<br/>Course + lesson data"]
     end
 
-    subgraph Execution_Layer
-        PISTON["☁️ Piston API<br/>Remote execution<br/>(web/mobile fallback)"]
-        LOCAL["💻 Local Runner<br/>child_process spawn<br/>(desktop app)"]
-        VSTERM["VS Code Terminal<br/>Built-in task runner<br/>(VS Code ext)"]
+    subgraph Electron_Layer["Electron Process"]
+        MAIN["main.js<br/>Window + IPC"]
+        PRELOAD["preload.js<br/>contextBridge"]
+        RUNTIME["runtimeDetect.js<br/>Language detection"]
+        RUNNER["codeRunner.js<br/>Child process spawn"]
+        ENGINE["engineLauncher.js<br/>Godot/Unity/Unreal"]
     end
 
-    subgraph Backend
-        SUPABASE["⚡ Supabase<br/>PostgreSQL + Auth + API"]
-        SUPABASE --> DB[("🗄️ courses<br/>modules<br/>lessons<br/>user_progress")]
+    subgraph Local_Machine["Your Machine"]
+        PYTHON["python3"]
+        NODE["node"]
+        CPP["g++"]
+        CSHARP["dotnet"]
+        RUST["rustc"]
+        GODOT["Godot Engine"]
+        UNITY["Unity Editor"]
+        UNREAL["Unreal Engine"]
+        VSCODE["VS Code (code CLI)"]
     end
 
-    subgraph Storage
-        ASYNC["📱 AsyncStorage<br/>Local progress<br/>(guest mode)"]
-    end
+    UI -->|IPC invoke| MAIN
+    MAIN --> RUNTIME
+    MAIN --> RUNNER
+    MAIN --> ENGINE
+    PRELOAD --> UI
 
-    WEB --> PISTON
-    MOBILE --> PISTON
-    DESKTOP --> LOCAL
-    DESKTOP --> SUPABASE
-    VSCODE --> VSTERM
-    VSCODE --> SUPABASE
+    RUNNER --> PYTHON
+    RUNNER --> NODE
+    RUNNER --> CPP
+    RUNNER --> CSHARP
+    RUNNER --> RUST
 
-    SUPABASE --> ASYNC
+    ENGINE --> GODOT
+    ENGINE --> UNITY
+    ENGINE --> UNREAL
+    ENGINE --> VSCODE
+
+    SUPA -->|HTTP fetch| UI
 ```
 
-### Code Execution Flow (How Your Code Actually Runs)
+### Bento Box Course Layout Flow
+
+```mermaid
+graph TB
+    START["App Opens"] --> HOME["Home View: Bento Grid<br/>Grid of course cards<br/>Each shows progress bar<br/>Click to expand"]
+
+    HOME --> CLICK["User clicks a course card"]
+
+    CLICK --> THREEPANEL["3-Panel Course View"]
+
+    subgraph LP["Left Panel"]
+        MODULES["Module Tree<br/>01 Variables<br/>│ [ok] var<br/>│ [ok] types<br/>│ [>] strings<br/>02 Control Flow<br/>│ [ ] if/else"]
+    end
+
+    subgraph CP["Center Panel"]
+        INSTRUCTIONS["Lesson Instructions<br/>Description + test cases<br/>Code snippet display"]
+        EDITOR["Monaco Code Editor<br/>Syntax highlighting<br/>Automatic layout"]
+    end
+
+    subgraph RP["Right Panel"]
+        OUTPUT["Output Terminal<br/>[run] [debug] [vs] [submit]<br/>Live process output<br/>Stdout/stderr streams"]
+        ENGINES["Engine Bar<br/>▶ Godot ▶ Unity ▶ Unreal"]
+    end
+
+    THREEPANEL --> LP
+    THREEPANEL --> CP
+    THREEPANEL --> RP
+
+    MODULES -->|Click lesson| INSTRUCTIONS
+    INSTRUCTIONS --> EDITOR
+    EDITOR -->|Write code| RUNNER_2["codeRunner.js:spawn()"]
+    RUNNER_2 --> OUTPUT
+
+    EDITOR -->|Click engine button| ENGINELAUNCH["engineLauncher.js"]
+    ENGINELAUNCH -->|Create project + run| ENGINE_RESULT["Engine output in terminal<br/>Project files in temp dir"]
+```
+
+### Code Execution Flow
 
 ```mermaid
 sequenceDiagram
-    participant U as You (User)
-    participant E as Exercise Screen
-    participant L as localRunner.js
-    participant P as Piston API
-    participant EL as Electron (Desktop)
-    
-    U->>E: Write code & click [run]
-    E->>L: runCodeLocally("python", code)
-    
-    alt Desktop App (Electron detected)
-        L->>EL: window.electronAPI.runCode()
-        EL->>EL: spawn("python3", tempFile)
-        EL-->>L: { output, stdout, stderr, exitCode }
-    else Web/Mobile (no Electron)
-        L->>P: POST /api/v2/piston/execute
-        P-->>L: { output, stdout, stderr }
-    end
-    
-    L-->>E: Result
-    E-->>U: Display output in terminal pane
+    participant U as You
+    participant UI as Desktop UI
+    participant EL as Electron IPC
+    participant CR as codeRunner.js
+    participant OS as OS Process
 
-    U->>E: Click [debug]
-    E->>L: debugCodeLocally("python", code)
-    
-    alt Desktop App
-        L->>EL: IPC: code:debug
-        EL->>EL: spawn with streaming
-        EL-->>L: Stream events: code:debug-output
-        L-->>E: Real-time output lines
-        E-->>U: Streaming terminal output (blinking cursor included)
-    else Web/Mobile
-        L->>P: Execute (same as run, no streaming)
-        P-->>L: Result
-        L-->>E: All output at once (debug ≈ run on web)
+    U->>UI: Write code in Monaco
+    U->>UI: Click [run]
+    UI->>EL: ipcRenderer.invoke("code:run")
+    EL->>CR: runCode("python", code)
+    CR->>OS: spawn("python3", tempFile.py)
+    OS-->>CR: stdout + stderr
+    CR-->>EL: { output, exitCode }
+    EL-->>UI: Display in output panel
+
+    U->>UI: Click [debug]
+    UI->>EL: ipcRenderer.send("code:debug")
+    EL->>CR: debugCode("python", code)
+    CR->>OS: spawn with streaming
+    loop Every output line
+        OS-->>CR: stdout/stderr chunk
+        CR-->>EL: ipcMain.send("code:debug-output")
+        EL-->>UI: Append to output in real-time
     end
+    OS-->>CR: process exit
+    CR-->>EL: ipcMain.send("code:debug-done")
+    EL-->>UI: Show exit code
 ```
 
-### VS Code Extension Architecture
+### Game Engine Launch Flow
 
 ```mermaid
-graph LR
-    subgraph VS_Code["VS Code Window"]
-        SIDEBAR["📂 Sidebar<br/>CourseTreeProvider<br/>courses → modules → lessons"]
-        WEBVIEW["📄 Webview Panel<br/>LessonWebviewProvider<br/>renders exercise content"]
-        TERMINAL["💻 Integrated Terminal<br/>User writes & runs code"]
-        STATUSBAR["📊 Status Bar<br/>KidhrCode indicator"]
+sequenceDiagram
+    participant U as You
+    participant UI as Desktop UI
+    participant EL as Electron IPC
+    participant ENG as engineLauncher.js
+    participant FS as File System
+    participant ENGINE as Godot/Unity/Unreal
+
+    U->>UI: Click ▶ Godot
+    UI->>EL: ipcRenderer.invoke("engine:launch", "godot")
+    EL->>ENG: launchEngine("godot", code, "gdscript")
+
+    ENG->>FS: Create temp project dir
+    ENG->>FS: Write project.godot
+    ENG->>FS: Write main.gd (code)
+    ENG->>FS: Write engine config files
+
+    ENG->>ENGINE: spawn("godot", ["--path", dir, "--headless", "--script", script])
+
+    alt Engine exists
+        ENGINE-->>ENG: stdout + stderr
+        ENG-->>EL: { success, output, projectPath }
+        EL-->>UI: Show output in terminal panel
+        U->>UI: "Project at: /tmp/khc_godot_xxx"
+    else Engine not found
+        ENG-->>EL: { success: false, error: "not found" }
+        EL-->>UI: Show error in terminal
     end
-
-    subgraph Extension["vscode-kidhrcode"]
-        EXT["extension.ts<br/>activation & commands"]
-        SUPABASE_CLIENT["supabase.ts<br/>fetch courses/modules/lessons"]
-        PROGRESS["progress.ts<br/>sync with Supabase"]
-    end
-
-    EXT --> SIDEBAR
-    EXT --> WEBVIEW
-    EXT --> STATUSBAR
-    EXT --> SUPABASE_CLIENT
-    SUPABASE_CLIENT --> SUPABASE_API["☁️ Supabase REST API"]
-    WEBVIEW --> SUPABASE_CLIENT
-    PROGRESS --> SUPABASE_API
-```
-
-### Build Pipeline (How to Get Installers)
-
-```mermaid
-graph LR
-    subgraph Source["Source Code"]
-        APP["app/ 🖼️ Screens"]
-        LIB["lib/ 📚 Shared Utilities"]
-        ELEC["electron/ ⚡ Main Process"]
-    end
-
-    subgraph Build["Build Step"]
-        EXPO["expo export --platform web"]
-        TSC["tsc (VS Code ext)"]
-    end
-
-    subgraph Packaging["Packaging"]
-        DIST["dist/ 🎯 Web Bundle"]
-        ELECTRON_BUILDER["electron-builder"]
-        VSCE["vsce package"]
-    end
-
-    subgraph Installers["Output Installers"]
-        WIN["🪟 KidhrCode Setup.exe<br/>KidhrCode Portable.exe"]
-        MAC["🍎 KidhrCode.dmg<br/>(Intel + Apple Silicon)"]
-        LINUX["🐧 KidhrCode.AppImage<br/>kidhrcode.deb"]
-        VSIX["🔌 kidhrcode-1.0.0.vsix"]
-    end
-
-    APP --> EXPO --> DIST --> ELECTRON_BUILDER
-    ELEC --> ELECTRON_BUILDER
-    ELECTRON_BUILDER --> WIN
-    ELECTRON_BUILDER --> MAC
-    ELECTRON_BUILDER --> LINUX
-
-    subgraph VSCode_Ext["VS Code Extension"]
-        EXT_SRC["src/ 🎯 Extension TS"]
-    end
-
-    EXT_SRC --> TSC --> VSCE --> VSIX
 ```
 
 ---
 
-## 🚀 Quick Start (Because You're Impatient)
+## Project Structure
+
+```
+KidhrCode/
+├── desktop/                          # *** PRIMARY: Desktop frontend ***
+│   ├── index.html                    # Main layout (bento grid + 3-panel)
+│   └── ui/
+│       ├── style.css                 # Full dark theme CSS
+│       └── app.js                    # All frontend logic (Monaco, IPC, routing)
+├── electron/                         # Electron backend
+│   ├── main.js                       # Main process (window, IPC handlers)
+│   ├── preload.js                    # contextBridge (safe API exposure)
+│   ├── runtimeDetect.js              # Detect 12 language runtimes
+│   ├── codeRunner.js                 # Spawn processes (run + debug)
+│   └── engineLauncher.js             # *** NEW: Godot/Unity/Unreal project launcher ***
+├── app/                              # Expo mobile/web screens (legacy)
+├── lib/                              # Shared utilities (Supabase, gamification)
+├── components/                       # Shared React components
+├── vscode-kidhrcode/                 # VS Code extension (companion)
+├── supabase/                         # DB schema + seed data
+├── scripts/                          # Seed scripts
+├── package.json                      # electron-builder config for installers
+└── README.md                         # This file
+```
+
+---
+
+## How the Integration Works
+
+### Language Runtime Detection
+
+When the app starts, `runtimeDetect.js` runs these commands:
+
+| Language | Detection Command | Runs Code Via |
+|---|---|---|
+| Python | `python3 --version` / `python --version` | `python3 file.py` |
+| JavaScript | `node --version` | `node file.js` |
+| TypeScript | `npx tsc --version` | `npx tsx file.ts` |
+| C++ | `g++ --version` | `g++ file.cpp -o out && ./out` |
+| C# | `dotnet --version` | `dotnet script file.cs` |
+| Rust | `rustc --version` | `rustc file.rs -o out && ./out` |
+| Go | `go version` | `go run file.go` |
+| Java | `java -version` | `javac file.java && java File` |
+| Ruby | `ruby --version` | `ruby file.rb` |
+| PHP | `php --version` | `php file.php` |
+| Bash | `bash --version` | `bash file.sh` |
+| Dart | `dart --version` | `dart run file.dart` |
+
+Results are cached and displayed in the footer of the home view. Missing runtimes are grayed out.
+
+### Game Engine Integration (Deep Dive)
+
+Each engine gets its own project generator in `electron/engineLauncher.js`:
+
+**Godot:**
+```
+/tmp/khc_godot_1678901234/
+├── project.godot         # [application] config/name, run/main_scene
+└── main.gd               # The user's GDScript code
+```
+Runs: `godot --path /tmp/khc_godot_xxx --headless --script main.gd`
+
+**Unity:**
+```
+/tmp/khc_unity_1678901234/
+├── Assets/
+│   ├── Exercise.cs        # The user's C# code
+│   └── Assembly-CSharp.csproj  # netstandard2.1 target
+└── ProjectSettings/       # Auto-generated by Unity
+```
+Runs: `Unity -projectPath /tmp/khc_unity_xxx -batchmode -quit -executeMethod ExerciseRunner.Run`
+
+**Unreal Engine:**
+```
+/tmp/khc_unreal_1678901234/
+├── KidhrCode.uproject     # JSON project descriptor (EngineAssociation: 5.3)
+├── Source/
+│   └── KidhrCode/
+│       ├── Exercise.cpp   # The user's C++ code
+│       └── KidhrCode.Target.cs  # Build rules
+```
+Runs: `UnrealEditor-Cmd.exe /tmp/khc_unreal_xxx/KidhrCode.uproject -RunTest`
+
+Each detects the engine at the default install path for the current OS. If not found, the button is grayed out with a `missing` class.
+
+### Monaco Editor
+
+The editor is loaded from CDN and initialized with a custom `khc-dark` theme matching the app's terminal aesthetic:
+
+```js
+monaco.editor.defineTheme('khc-dark', {
+  base: 'vs-dark',
+  colors: {
+    'editor.background': '#000000',
+    'editor.foreground': '#D0D0D0',
+    'editorCursor.foreground': '#3FB950',
+  },
+});
+```
+
+Language mapping converts KidhrCode language names to Monaco language IDs:
+`python` → `python`, `gdscript` → `python`, `cpp` → `cpp`, etc.
+
+---
+
+## Quick Start
 
 ### Prerequisites
-- Node.js 18+ (you have this, right? right??)
-- npm or yarn (pick a lane)
-- A Supabase account (free tier, we're broke too)
-- Python 3.x (if you want to actually run Python locally, revolutionary concept)
+- Node.js 18+
+- npm
+- A Supabase account (free tier)
 
 ### 1. Clone & Install
 ```bash
@@ -233,187 +359,14 @@ cd KidhrCode
 npm install
 ```
 
-### 2. Set Up Supabase
-1. Create a Supabase project at [supabase.com](https://supabase.com) (it's free, calm down)
-2. Go to **SQL Editor** and run `supabase/schema.sql` to create all tables
-3. Run `supabase/seed-full.sql` to get all 19 courses (or `supabase/seed.sql` for the starter 2)
-4. Go to **Project Settings → API** and copy your URL and anon key
-5. Open `lib/constants.js` and paste them in like you're defusing a bomb
-
-### 3. Run Web/Mobile (The Old Way)
+### 2. Run Desktop App
 ```bash
-npm run web
-# or
-npm run android
+npm run electron
 ```
 
-### 4. Run Desktop App (The New Hotness)
+### 3. Build Installers
 ```bash
-# Development mode (starts Expo + Electron together)
-npm run electron:dev
-
-# Production build (creates installers)
-npm run electron:build
-```
-
-### 5. VS Code Extension
-```bash
-cd ../vscode-kidhrcode
-npm install
-npm run package   # creates .vsix
-# Install in VS Code: Extensions → ... → Install from VSIX
-```
-
----
-
-## 🏗️ Project Structure (What Goes Where)
-
-```
-KidhrCode/                          # Main project root
-├── app/                            # Expo Router screens
-│   ├── _layout.tsx                 # Root layout — redirects to tabs immediately
-│   ├── (tabs)/                     # Main app with bottom tab navigation
-│   │   ├── index.tsx               # Home — course catalog, stats, guest banner
-│   │   ├── courses.tsx             # All courses with search + language filter
-│   │   ├── leaderboard.tsx         # Rankings (daily/weekly/monthly/all-time)
-│   │   └── profile.tsx             # Profile, stats, badges, sync local progress
-│   ├── auth/                       # Login & signup (modal)
-│   ├── course/[id].tsx             # Course detail with modules + lessons tree
-│   ├── exercise/[id].tsx           # Exercise player — 16 types, run/debug buttons
-│   ├── certificate/                # Certificate generation + LinkedIn sharing
-│   ├── creator/                    # Course builder studio (create, edit, publish)
-│   └── admin/                      # Admin dashboard
-├── electron/                       # *** NEW: Electron desktop app ***
-│   ├── main.js                     # Main process — BrowserWindow + IPC setup
-│   ├── preload.js                  # contextBridge — safe API for renderer
-│   ├── runtimeDetect.js            # Detects installed language runtimes
-│   └── codeRunner.js               # Spawns processes: run + debug modes
-├── lib/
-│   ├── supabase.js                 # Supabase client (you know, the DB)
-│   ├── piston.js                   # Piston API integration (remote code exec)
-│   ├── localRunner.js              # *** NEW: Unified API — Electron local or Piston fallback ***
-│   ├── runtimeDetect.js            # *** NEW: Shared runtime detection ***
-│   ├── localProgress.js            # AsyncStorage-based offline progress
-│   ├── gamification.js             # XP, levels, ranks, streaks, badges
-│   └── constants.js                # Colors, env vars, icons, exercise types
-├── components/
-│   └── Terminal.js                 # Shared terminal-themed UI components
-├── supabase/
-│   ├── schema.sql                  # Full DB schema (tables, RLS, triggers)
-│   ├── seed.sql                    # Starter courses (Python 101 + JS Basics)
-│   └── seed-full.sql               # All 19 courses
-├── scripts/
-│   └── seed-courses.mjs            # Programmatic seeder (Node.js)
-├── dist/                           # Web export output (loaded by Electron in prod)
-├── public/                         # PWA icons + manifest
-├── package.json                    # Dependencies + build scripts + electron-builder config
-├── app.json                        # Expo config
-└── README.md                       # This masterpiece you're reading
-
-vscode-kidhrcode/                   # *** NEW: VS Code Extension ***
-├── package.json                    # Extension manifest + vsce config
-├── tsconfig.json                   # TypeScript config (strict, because we're professionals)
-├── .vscodeignore                   # What NOT to bundle in the .vsix
-├── src/
-│   ├── extension.ts                # Activation, deactivation, command registration
-│   ├── courseTreeProvider.ts        # Tree view — courses → modules → lessons
-│   ├── webviewProvider.ts           # Webview panel for exercise content
-│   ├── supabase.ts                  # Supabase client + types (duplicated for isolation)
-│   └── progress.ts                  # Progress sync + status bar
-└── media/                          # Extension icons
-```
-
----
-
-## 🎮 How the Desktop App Works (The Interesting Part)
-
-### The "I Don't Want to Read" Summary
-
-```mermaid
-graph TB
-    START["User opens KidhrCode Desktop"] --> DETECT["runtimeDetect.js<br/>Scans for installed languages<br/>(python3 --version, node --version, etc.)"]
-    DETECT --> COURSES["Course list loads from Supabase"]
-    COURSES --> EXERCISE["User opens a code challenge"]
-
-    EXERCISE --> CHOICE{"Which button?"}
-    CHOICE -->|[run]| RUN["lib/localRunner.js<br/>runCodeLocally()"]
-    CHOICE -->|[debug]| DEBUG["lib/localRunner.js<br/>debugCodeLocally()"]
-    CHOICE -->|[ok] submit| SUBMIT["Piston API (always remote)<br/>(we need to verify correctness)"]
-
-    RUN --> SPAWN["electron/codeRunner.js<br/>child_process.spawn()"]
-    SPAWN --> OUTPUT["Output captured, displayed<br/>after process exits"]
-
-    DEBUG --> STREAM["electron/codeRunner.js<br/>child_process.spawn() w/ streaming"]
-    STREAM --> LIVE["Output streamed via IPC<br/>in real-time to the UI"]
-```
-
-### Execution Modes
-
-| Mode | Button | How It Works | When To Use |
-|---|---|---|---|
-| **Run** | `[run]` | Spawns process, captures stdout/stderr, returns when done | Quick check if code compiles/runs |
-| **Debug** | `[debug]` | Spawns process, streams output line-by-line via IPC to the UI | Need to see real-time output or progress |
-| **Submit** | `[ok]` | Sends code to Piston API for verification against expected output | Actually completing the exercise for XP |
-
-### Supported Languages (Local Execution)
-
-| Language | Detected Via | Runner |
-|---|---|---|
-| Python | `python3 --version` / `python --version` | `python3 file.py` |
-| JavaScript | `node --version` | `node file.js` |
-| TypeScript | `npx tsc --version` | `npx tsx file.ts` |
-| C++ | `g++ --version` | `g++ file.cpp -o file.out && ./file.out` |
-| C# | `dotnet --version` | `dotnet script file.cs` |
-| Rust | `rustc --version` | `rustc file.rs -o file.out && ./file.out` |
-| Go | `go version` | `go run file.go` |
-| Java | `java -version` + `javac` | `javac file.java && java File` |
-| Ruby | `ruby --version` | `ruby file.rb` |
-| PHP | `php --version` | `php file.php` |
-| Bash | `bash --version` | `bash file.sh` |
-| Dart | `dart --version` | `dart run file.dart` |
-
----
-
-## 🔌 VS Code Extension (The "I Never Leave My Editor" Option)
-
-```mermaid
-graph TB
-    VSCODE["VS Code Window"] --> SIDEBAR["Activity Bar: KidhrCode icon"]
-    SIDEBAR --> TREE["Courses Tree View<br/>📚 Course 1<br/>  📦 Module 1<br/>    📖 Lesson 1<br/>    💻 Code Challenge 1"]
-
-    TREE --> CLICK["Click a lesson"]
-    CLICK --> WEBVIEW_PANEL["Webview Panel opens<br/>showing exercise content"]
-    CLICK --> COMMAND["Also fires kidhrcode.openLesson command"]
-
-    WEBVIEW_PANEL --> USER["User reads lesson"]
-    USER --> EDITOR["User writes code in VS Code editor<br/>(scratch file created)"]
-    USER --> TERMINAL["User runs code in VS Code terminal<br/>CTRL+` — built-in, no config needed"]
-    USER --> SYNC["Progress syncs to Supabase<br/>(server.progressManager.sync)"]
-
-    STATUSBAR["Status Bar: $(book) KidhrCode"] --> CLICK_STATS["Click to show progress"]
-```
-
-### What It Does
-- **Sidebar tree**: Browse all published courses from Supabase, organized by course → module → lesson
-- **Webview panel**: Click any lesson to see its content with a nice webview panel (dark theme, monospace, obviously)
-- **Run code**: VS Code already has terminals. We're not reinventing that wheel. Just write code in a scratch file and run it however you want.
-- **Progress sync**: When you complete exercises, your progress syncs back to Supabase so your streak doesn't die
-
-### Commands
-| Command | Keybinding | What It Does |
-|---|---|---|
-| `KidhrCode: Refresh Courses` | — | Refreshes the course tree from Supabase |
-| `KidhrCode: Sign In` | — | Opens auth flow (browser-based, Supabase magic link) |
-| `KidhrCode: Show Progress` | — | Shows your current stats in a notification |
-
----
-
-## 🏗️ Build It Yourself (Installer Options)
-
-### Desktop App Installers
-
-```bash
-# All platforms (Windows + macOS + Linux)
+# All platforms
 npm run electron:build
 
 # Windows only (NSIS installer + portable)
@@ -426,39 +379,33 @@ npm run electron:build:mac
 npm run electron:build:linux
 ```
 
-**Output location**: `release/` directory
-
-| Platform | Installer Type | File |
-|---|---|---|
-| Windows | NSIS Installer | `KidhrCode Setup x.x.x.exe` |
-| Windows | Portable | `KidhrCode x.x.x.exe` |
-| macOS | DMG | `KidhrCode x.x.x.dmg` |
-| macOS | (Intel + Apple Silicon) | Universal binary |
-| Linux | AppImage | `KidhrCode x.x.x.AppImage` |
-| Linux | Debian Package | `kidhrcode_x.x.x_amd64.deb` |
-
-### VS Code Extension
-
+### VS Code Extension (Companion)
 ```bash
 cd vscode-kidhrcode
 npm install
-npm run package    # produces kidhrcode-1.0.0.vsix
+npm run package   # produces kidhrcode-1.0.0.vsix
+# Install: Extensions → Install from VSIX
 ```
-
-Install the `.vsix` in VS Code:
-- Extensions (Ctrl+Shift+X) → `...` menu → Install from VSIX...
-- Or: `code --install-extension kidhrcode-1.0.0.vsix`
 
 ---
 
-## 🗄️ Database Schema (For the Nerds)
+## Supporting Game Engines
+
+To use the engine launch buttons, install the corresponding engine:
+
+- **Godot**: Download from [godotengine.org](https://godotengine.org), add `godot` to PATH
+- **Unity**: Install via Unity Hub (default path: `C:\Program Files\Unity\Hub\Editor\2022.3\Editor\Unity.exe`)
+- **Unreal**: Install via Epic Games Launcher (default path: `C:\Program Files\Epic Games\UE_5.3\Engine\Binaries\Win64\UnrealEditor-Cmd.exe`)
+
+---
+
+## Database Schema
 
 ```mermaid
 erDiagram
     COURSES ||--o{ MODULES : contains
     MODULES ||--o{ LESSONS : contains
     USERS ||--o{ USER_PROGRESS : tracks
-    LESSONS ||--o{ USER_PROGRESS : completed_by
 
     COURSES {
         uuid id PK
@@ -467,121 +414,55 @@ erDiagram
         text language
         text difficulty
         boolean published
-        uuid author_id FK
-        timestamp created_at
     }
-
     MODULES {
         uuid id PK
         uuid course_id FK
         text title
         int order_index
     }
-
     LESSONS {
         uuid id PK
         uuid module_id FK
         text title
         text exercise_type
-        text difficulty
         jsonb config
         int order_index
     }
-
     USER_PROGRESS {
         uuid id PK
         uuid user_id FK
         uuid lesson_id FK
         boolean completed
         int xp_earned
-        text language
-        timestamp completed_at
-    }
-
-    USERS {
-        uuid id PK
-        text email
-        text username
-        int total_xp
-        int streak
     }
 ```
 
 ---
 
-## 🎮 Gamification System (The Numbers)
+## Gamification
 
-### XP Calculation
 ```
-Base XP per difficulty:
-  beginner: 10   easy: 25   medium: 50   hard: 100   expert: 200
-
-Streak Multiplier:
-  3-day:   1.2x
-  7-day:   1.5x
-  14-day:  1.8x
-  30-day:  2.0x
-
-Final XP = baseXp × streakMultiplier
+Base XP:  beginner=10  easy=25  medium=50  hard=100  expert=200
+Streak:   3d→1.2x  7d→1.5x  14d→1.8x  30d→2.0x
+Level:    floor(sqrt(totalXp/100)) + 1
+Ranks:    Novice(0) → Coder(1k) → Developer(5k) → Engineer(15k) → Architect(35k) → Legend(70k)
 ```
-
-### Levels
-```
-level = floor(sqrt(totalXp / 100)) + 1
-```
-Level 1 at 0 XP, Level 10 at 9,900 XP, Level 50 at 249,900 XP. Good luck.
-
-### Ranks
-| Rank | Min XP | Color | Vibe |
-|---|---|---|---|
-| Novice | 0 | Gray | We all start somewhere |
-| Coder | 1,000 | Silver | You wrote a thing |
-| Developer | 5,000 | Light Gray | You wrote a thing that works |
-| Engineer | 15,000 | Blue | You wrote a thing that scales |
-| Architect | 35,000 | Purple | You wrote a thing that haunts juniors |
-| Legend | 70,000 | Red | Please go outside |
 
 ---
 
-## 🤝 Contributing (You Help Too)
+## License
 
-### Adding Courses
-Courses are JSON configs. Anyone can create them through the in-app course creator:
-1. Sign up → Profile → Create a Course
-2. Fill in details (title, language, difficulty)
-3. Add modules and lessons with exercise configs
-4. Publish for the world to see (or not, we won't judge)
-
-### Exercise Config Format
-```json
-// Multiple choice
-{ "description": "What is 2+2?", "options": ["3", "4", "5"], "correct_index": 1 }
-
-// Code challenge
-{ "description": "Print 'Hello'", "starter_code": "", "expected_output": "Hello" }
-
-// Output prediction
-{ "code_snippet": "print(2**3)", "correct_answer": "8" }
-```
-
-### Code
-PRs welcome. Try not to break stuff. We have CI for a reason.
+MIT — free to use, modify, and distribute.
 
 ---
 
-## 📄 License
+## Built With
 
-MIT — do whatever you want. Sell it, burn it, frame it, use it to teach your cat to code. We don't care. Just don't blame us when your production deployment catches fire.
-
----
-
-## 💬 Support & Credits
-
-- **Issues**: [GitHub Issues](https://github.com/0giinn0/KidhrCode/issues) — report bugs, request features, scream into the void
-- **Built with**: [Expo](https://expo.dev) + [Supabase](https://supabase.com) + [Electron](https://www.electronjs.org/) + [VS Code](https://code.visualstudio.com/api)
-- **Code execution**: [Piston API](https://github.com/engineer-man/piston) by engineer-man (remote) + your local machine (desktop)
-- **Inspiration**: Duolingo, but if the owl swore and used a terminal
-
----
-
-*"I'm touching myself tonight."* — Deadpool, and also this README's author, after writing 400 lines of documentation nobody will read.
+- **Desktop UI**: Vanilla HTML/CSS/JS + Monaco Editor
+- **Desktop Runtime**: Electron
+- **Backend**: Supabase (PostgreSQL + REST API)
+- **Code Execution**: Local child_process spawn (Piston API as fallback on web)
+- **Game Engines**: Godot, Unity, Unreal Engine (detected and launched locally)
+- **Mobile/Web (legacy)**: Expo + React Native
+- **VS Code Extension**: TypeScript + VS Code API
