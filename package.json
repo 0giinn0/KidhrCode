@@ -37,10 +37,10 @@
     "web": "expo start --web",
     "electron": "electron electron/main.js",
     "electron:dev": "concurrently \"expo start --web\" \"wait-on http://localhost:8081 && electron electron/main.js\"",
-    "electron:build": "expo export --platform web && electron-builder --win --mac --linux",
-    "electron:build:win": "expo export --platform web && electron-builder --win",
-    "electron:build:mac": "expo export --platform web && electron-builder --mac",
-    "electron:build:linux": "expo export --platform web && electron-builder --linux"
+    "electron:build": "electron-builder --win --mac --linux",
+    "electron:build:win": "electron-builder --win",
+    "electron:build:mac": "electron-builder --mac",
+    "electron:build:linux": "electron-builder --linux"
   },
   "build": {
     "appId": "com.kidhrcode.app",
@@ -49,9 +49,12 @@
       "output": "release"
     },
     "files": [
-      "dist/**/*",
+      "desktop/**/*",
       "electron/**/*",
       "package.json"
+    ],
+    "extraResources": [
+      "desktop/ui/**/*"
     ],
     "win": {
       "target": [

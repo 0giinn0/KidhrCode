@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KidhrCode</title>
+<link rel="stylesheet" href="ui/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- Title Bar -->
+  <div class="titlebar" id="titlebar">
+    <div class="titlebar-brand">
+      <span class="titlebar-icon">></span>
+      <span>kidhrcode</span>
+      <span class="titlebar-version">v1.0</span>
+    </div>
+    <div class="titlebar-breadcrumb" id="breadcrumb">
+      <span class="crumb-home">courses</span>
+    </div>
+    <div class="titlebar-status" id="statusText">ready</div>
+    <div class="titlebar-actions">
+      <span id="streakDisplay" class="streak-badge" title="Current streak">=== 0d</span>
+      <span id="xpDisplay" class="xp-badge" title="Total XP">+0 xp</span>
+      <button class="tb-btn" id="btnSettings" title="Settings">⊙</button>
+      <button class="tb-btn" id="btnMinimize">─</button>
+      <button class="tb-btn" id="btnMaximize">□</button>
+      <button class="tb-btn tb-close" id="btnClose">✕</button>
+    </div>
+  </div>
+
+  <!-- Main Body -->
+  <div class="body">
+
+    <!-- HOME VIEW: Bento Course Grid -->
+    <div id="homeView" class="view">
+      <div class="home-header">
+        <div class="home-title">
+          <span class="home-prompt">></span> choose your weapon
+        </div>
+        <div class="home-stats">
+          <div class="stat-card" id="statCourses"><span class="stat-num">0</span> courses</div>
+          <div class="stat-card" id="statLessons"><span class="stat-num">0</span> done</div>
+          <div class="stat-card" id="statXp"><span class="stat-num">0</span> xp</div>
+          <div class="stat-card" id="statStreak"><span class="stat-num">0d</span> streak</div>
+        </div>
+      </div>
+      <div class="bento-grid" id="courseGrid">
+        <div class="bento-empty">loading courses...</div>
+      </div>
+      <div class="home-footer">
+        <span class="engine-badge" id="enginePython">◈ python</span>
+        <span class="engine-badge" id="engineNode">◈ node</span>
+        <span class="engine-badge" id="engineGodot">◈ godot</span>
+        <span class="engine-badge" id="engineUnity">◈ unity</span>
+        <span class="engine-badge" id="engineUnreal">◈ unreal</span>
+        <span class="engine-badge" id="engineCpp">◈ cpp</span>
+      </div>
+    </div>
+
+    <!-- COURSE VIEW: 3-Panel Bento -->
+    <div id="courseView" class="view" style="display:none">
+      <div class="course-topbar">
+        <button class="back-btn" id="courseBack">{>} back to courses</button>
+        <span class="course-title" id="courseTitle">Course</span>
+        <span class="course-progress" id="courseProgress">0%</span>
+      </div>
+      <div class="course-body">
+        <!-- Left Panel: Module/Lesson Tree -->
+        <div class="panel panel-left" id="panelLessons">
+          <div class="panel-header">
+            <span>MODULES</span>
+            <button class="panel-close" id="lessonsClose">◃</button>
+          </div>
+          <div class="panel-content" id="moduleTree"></div>
+          <div class="panel-restore" id="lessonsRestore">▹ MODULES</div>
+        </div>
+        <div class="divider divider-col" id="dividerLessons"></div>
+
+        <!-- Center Panel: Instructions + Code Editor -->
+        <div class="panel panel-center" id="panelCenter">
+          <div class="center-top">
+            <div class="lesson-header">
+              <span class="lesson-badge" id="lessonBadge">[LESSON]</span>
+              <span class="lesson-title" id="lessonTitle">Select a lesson</span>
+            </div>
+            <div class="lesson-desc" id="lessonDesc">Click a lesson from the left panel to begin.</div>
+          </div>
+          <div class="center-editor" id="editorArea">
+            <div id="editorContainer"></div>
+          </div>
+          <div class="center-bottom" id="lessonExtra">
+            <div class="test-cases" id="testCases" style="display:none">
+              <span class="test-label">> test cases</span>
+              <div id="testList"></div>
+            </div>
+          </div>
+        </div>
+        <div class="divider divider-col" id="dividerOutput"></div>
+
+        <!-- Right Panel: Output -->
+        <div class="panel panel-right" id="panelOutput">
+          <div class="panel-header">
+            <span>OUTPUT</span>
+            <div class="output-actions">
+              <span class="output-tab active" data-mode="run" id="outputTabRun">run</span>
+              <span class="output-tab" data-mode="debug" id="outputTabDebug">debug</span>
+            </div>
+          </div>
+          <div class="panel-content output-content" id="outputContent">
+            <div class="output-placeholder">run your code to see output here</div>
+          </div>
+          <div class="output-actions-bar">
+            <button class="action-btn" id="btnRun">[ run ]</button>
+            <button class="action-btn debug-btn" id="btnDebug">[ debug ]</button>
+            <button class="action-btn vs-btn" id="btnVSCode">[ vs ]</button>
+            <span style="flex:1"></span>
+            <button class="action-btn submit-btn" id="btnSubmit">[ ok ] submit</button>
+          </div>
+          <div class="engine-bar" id="engineBar">
+            <button class="engine-btn" id="btnGodot">▶ Godot</button>
+            <button class="engine-btn" id="btnUnity">▶ Unity</button>
+            <button class="engine-btn" id="btnUnreal">▶ Unreal</button>
+          </div>
+        </div>
+      </div>
+      <div class="course-statusbar" id="courseStatusbar"></div>
+    </div>
+
+  </div>
+
+  <!-- Result Toast -->
+  <div id="resultToast" class="toast" style="display:none">
+    <span id="toastIcon">[ok]</span>
+    <span id="toastText">all tests passed</span>
+    <span id="toastXp">+25 xp</span>
+  </div>
+
+</div>
+
+<!-- Monaco Editor CDN -->
+<script src="https://cdn.jsdelivr.net/npm/monaco-editor@0.45.0/min/vs/loader.js"></script>
+<script src="ui/app.js"></script>
+</body>
+</html>

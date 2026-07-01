@@ -19,4 +19,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   getAppVersion: () => ipcRenderer.invoke('app:version'),
   openInVSCode: (code, lang) => ipcRenderer.invoke('vscode:open', { code, lang }),
+  launchEngine: (engine, code, language) => ipcRenderer.invoke('engine:launch', { engine, code, language }),
+  minimize: () => ipcRenderer.send('window:minimize'),
+  maximize: () => ipcRenderer.send('window:maximize'),
+  close: () => ipcRenderer.send('window:close'),
 });
